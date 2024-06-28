@@ -1,0 +1,65 @@
+identity:
+  author: quicksand
+  name: email
+  label:
+    en_US: Email
+    zh_Hans: 电子邮件
+  description:
+    en_US: Email
+    zh_Hans: Email
+  icon: icon.svg
+  tags:
+    - utilities
+credentials_for_provider:
+  smtp_from:
+    type: text-input
+    required: true
+    label:
+      en_US: SMTP From
+      zh_Hans: SMTP 发件人邮箱名称
+    placeholder:
+      en_US: Please input your SMTP From
+      zh_Hans: 请输入你的 SMTP 发件人邮箱名称
+  smtp_server:
+    type: secret-input
+    required: true
+    label:
+      en_US: SMTP Server
+      zh_Hans: SMTP 服务器地址
+    placeholder:
+      en_US: Please input your SMTP Server
+      zh_Hans: 请输入你的 SMTP 服务器地址
+  smtp_port:
+    type: text-input
+    required: true
+    label:
+      en_US: SMTP Port
+      zh_Hans: SMTP 端口号
+    placeholder:
+      en_US: Please input your SMTP Port
+      zh_Hans: 请输入你的 SMTP 端口号
+  smtp_username:
+    type: text-input
+    required: true
+    label:
+      en_US: SMTP Username
+      zh_Hans: SMTP 用户名
+    placeholder:
+      en_US: Please input your SMTP Username
+      zh_Hans: 请输入你的 SMTP 用户名
+  smtp_password:
+    type: secret-input
+    required: true
+    label:
+      en_US: SMTP Password
+      zh_Hans: SMTP 密码
+    placeholder:
+      en_US: Please input your SMTP Password
+      zh_Hans: 请输入你的 SMTP 密码
+  smtp_use_tls:
+    type: boolean
+    required: false
+    default: false
+    label:
+      en_US: Enable SMTP TLS
+      zh_Hans: 是否启用 SMTP TLS

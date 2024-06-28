@@ -1,0 +1,54 @@
+identity:
+  name: email
+  author: Focus On Myself
+  label:
+    en_US: Send Email
+    zh_Hans: 发送电子邮件
+  icon: icon.svg
+description:
+  human:
+    en_US: Send Email
+    zh_Hans: 发送电子邮件
+  llm: A tool for sending email
+parameters:
+  - name: content
+    type: string
+    required: true
+    label:
+      en_US: content
+      zh_Hans: 消息内容
+    human_description:
+      en_US: The content message
+      zh_Hans: 消息内容
+    llm_description: Content of the message
+    form: llm
+  - name: to
+    type: string
+    required: true
+    label:
+      en_US: to
+      zh_Hans: 收件人
+    human_description:
+      en_US: Recipient email address , each email address should be separated by ","
+      zh_Hans: 收件人邮箱地址，每个邮箱之间用 "," 分隔
+    form: form
+  - name: subject
+    type: string
+    required: true
+    label:
+      en_US: subject
+      zh_Hans: 主题
+    human_description:
+      en_US: Subject
+      zh_Hans: 主题
+    form: form
+  - name: cc
+    type: string
+    required: false
+    label:
+      en_US: cc
+      zh_Hans: 抄送人
+    human_description:
+      en_US: Carbon Copy Recipient email address , each email address should be separated by ","
+      zh_Hans: 抄送人邮箱地址，每个邮箱之间用 "," 分隔
+    form: form
