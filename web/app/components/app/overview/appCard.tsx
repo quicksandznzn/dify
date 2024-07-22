@@ -183,7 +183,7 @@ function AppCard({
                 <Confirm
                   type='warning'
                   title={t('appOverview.overview.appInfo.regenerate')}
-                  content={''}
+                  content={t('appOverview.overview.appInfo.regenerateNotice')}
                   isShow={showConfirmDelete}
                   onClose={() => setShowConfirmDelete(false)}
                   onConfirm={() => {
@@ -247,12 +247,14 @@ function AppCard({
         ? (
           <>
             <SettingsModal
+              isChat={appMode === 'chat'}
               appInfo={appInfo}
               isShow={showSettingsModal}
               onClose={() => setShowSettingsModal(false)}
               onSave={onSaveSiteConfig}
             />
             <EmbeddedModal
+              siteInfo={appInfo.site}
               isShow={showEmbedded}
               onClose={() => setShowEmbedded(false)}
               appBaseUrl={app_base_url}

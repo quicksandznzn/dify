@@ -3,12 +3,12 @@ import logging
 from typing import Any
 
 import sqlalchemy
-from flask import current_app
 from pydantic import BaseModel, model_validator
 from sqlalchemy import JSON, TEXT, Column, DateTime, String, Table, create_engine, insert
 from sqlalchemy import text as sql_text
 from sqlalchemy.orm import Session, declarative_base
 
+from configs import dify_config
 from core.rag.datasource.entity.embedding import Embeddings
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -161,11 +161,6 @@ class TiDBVector(BaseVector):
             print("Delete operation failed:", str(e))
             return False
 
-    def delete_by_document_id(self, document_id: str):
-        ids = self.get_ids_by_metadata_field('document_id', document_id)
-        if ids:
-            self._delete_by_ids(ids)
-
     def get_ids_by_metadata_field(self, key: str, value: str):
         with Session(self._engine) as session:
             select_statement = sql_text(
@@ -203,8 +198,8 @@ class TiDBVector(BaseVector):
         with Session(self._engine) as session:
             select_statement = sql_text(
                 f"""SELECT meta, text, distance FROM (
-                        SELECT meta, text, {tidb_func}(vector, "{query_vector_str}")  as distance 
-                        FROM {self._collection_name} 
+                        SELECT meta, text, {tidb_func}(vector, "{query_vector_str}")  as distance
+                        FROM {self._collection_name}
                         ORDER BY distance
                         LIMIT {top_k}
                     ) t WHERE distance < {distance};"""
@@ -239,15 +234,14 @@ class TiDBVectorFactory(AbstractVectorFactory):
             dataset.index_struct = json.dumps(
                 self.gen_index_struct_dict(VectorType.TIDB_VECTOR, collection_name))
 
-        config = current_app.config
         return TiDBVector(
             collection_name=collection_name,
             config=TiDBVectorConfig(
-                host=config.get('TIDB_VECTOR_HOST'),
-                port=config.get('TIDB_VECTOR_PORT'),
-                user=config.get('TIDB_VECTOR_USER'),
-                password=config.get('TIDB_VECTOR_PASSWORD'),
-                database=config.get('TIDB_VECTOR_DATABASE'),
-                program_name=config.get('APPLICATION_NAME'),
+                host=dify_config.TIDB_VECTOR_HOST,
+                port=dify_config.TIDB_VECTOR_PORT,
+                user=dify_config.TIDB_VECTOR_USER,
+                password=dify_config.TIDB_VECTOR_PASSWORD,
+                database=dify_config.TIDB_VECTOR_DATABASE,
+                program_name=dify_config.APPLICATION_NAME,
             ),
         )

@@ -31,9 +31,6 @@ class BaseVector(ABC):
     def delete_by_ids(self, ids: list[str]) -> None:
         raise NotImplementedError
 
-    def delete_by_document_id(self, document_id: str):
-        raise NotImplementedError
-
     def get_ids_by_metadata_field(self, key: str, value: str):
         raise NotImplementedError
 
@@ -70,3 +67,7 @@ class BaseVector(ABC):
 
     def _get_uuids(self, texts: list[Document]) -> list[str]:
         return [text.metadata['doc_id'] for text in texts]
+
+    @property
+    def collection_name(self):
+        return self._collection_name

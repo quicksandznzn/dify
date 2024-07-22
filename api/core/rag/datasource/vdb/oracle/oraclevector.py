@@ -6,9 +6,9 @@ from typing import Any
 
 import numpy
 import oracledb
-from flask import current_app
 from pydantic import BaseModel, model_validator
 
+from configs import dify_config
 from core.rag.datasource.entity.embedding import Embeddings
 from core.rag.datasource.vdb.vector_base import BaseVector
 from core.rag.datasource.vdb.vector_factory import AbstractVectorFactory
@@ -44,11 +44,11 @@ class OracleVectorConfig(BaseModel):
 
 SQL_CREATE_TABLE = """
 CREATE TABLE IF NOT EXISTS {table_name} (
-    id varchar2(100) 
+    id varchar2(100)
     ,text CLOB NOT NULL
     ,meta JSON
     ,embedding vector NOT NULL
-) 
+)
 """
 
 
@@ -156,13 +156,6 @@ class OracleVector(BaseVector):
     #            idss.append(record[0])
     #    return idss
 
-    #def delete_by_document_id(self, document_id: str):
-    #    ids = self.get_ids_by_metadata_field('doc_id', document_id)
-    #    if len(ids)>0:
-    #        with self._get_cursor() as cur:
-    #            cur.execute(f"delete FROM {self.table_name} d WHERE d.meta.doc_id in '%s'" % ("','".join(ids),))
-
-
     def delete_by_ids(self, ids: list[str]) -> None:
         with self._get_cursor() as cur:
             cur.execute(f"DELETE FROM {self.table_name} WHERE id IN %s" % (tuple(ids),))
@@ -226,14 +219,13 @@ class OracleVectorFactory(AbstractVectorFactory):
             dataset.index_struct = json.dumps(
                 self.gen_index_struct_dict(VectorType.ORACLE, collection_name))
 
-        config = current_app.config
         return OracleVector(
             collection_name=collection_name,
             config=OracleVectorConfig(
-                host=config.get("ORACLE_HOST"),
-                port=config.get("ORACLE_PORT"),
-                user=config.get("ORACLE_USER"),
-                password=config.get("ORACLE_PASSWORD"),
-                database=config.get("ORACLE_DATABASE"),
+                host=dify_config.ORACLE_HOST,
+                port=dify_config.ORACLE_PORT,
+                user=dify_config.ORACLE_USER,
+                password=dify_config.ORACLE_PASSWORD,
+                database=dify_config.ORACLE_DATABASE,
             ),
         )
