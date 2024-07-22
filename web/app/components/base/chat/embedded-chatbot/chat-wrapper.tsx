@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import cn from 'classnames'
 import Chat from '../chat'
 import type {
   ChatConfig,
@@ -9,6 +8,7 @@ import { useChat } from '../chat/hooks'
 import { useEmbeddedChatbotContext } from './context'
 import ConfigPanel from './config-panel'
 import { isDify } from './utils'
+import cn from '@/utils/classnames'
 import {
   fetchSuggestedQuestions,
   getUrl,
@@ -32,6 +32,7 @@ const ChatWrapper = () => {
     appMeta,
     handleFeedback,
     currentChatInstanceRef,
+    themeBuilder,
   } = useEmbeddedChatbotContext()
   const appConfig = useMemo(() => {
     const config = appParams || {}
@@ -130,6 +131,7 @@ const ChatWrapper = () => {
       suggestedQuestions={suggestedQuestions}
       answerIcon={isDify() ? <LogoAvatar className='relative shrink-0' /> : null}
       hideProcessDetail
+      themeBuilder={themeBuilder}
     />
   )
 }
