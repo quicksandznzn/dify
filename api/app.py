@@ -2,14 +2,14 @@ import os
 
 from configs import dify_config
 
-if os.environ.get("DEBUG", "false").lower() != 'true':
-    from gevent import monkey
-
-    monkey.patch_all()
-
-    import grpc.experimental.gevent
-
-    grpc.experimental.gevent.init_gevent()
+# if os.environ.get("DEBUG", "false").lower() != 'true':
+#     from gevent import monkey
+#
+#     monkey.patch_all()
+#
+#     import grpc.experimental.gevent
+#
+#     grpc.experimental.gevent.init_gevent()
 
 import json
 import logging
@@ -22,7 +22,6 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, Response, request
 from flask_cors import CORS
 from werkzeug.exceptions import Unauthorized
-
 from commands import register_commands
 
 # DO NOT REMOVE BELOW

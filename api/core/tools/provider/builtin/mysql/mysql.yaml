@@ -1,0 +1,15 @@
+identity:
+  author: quicksandzn
+  name: mysql
+  label:
+    en_US: MySQL
+    zh_Hans: MySQL
+    pt_BR: MySQL
+  description:
+    en_US: MySQL
+    zh_Hans: MySQL
+    pt_BR: MySQL
+  icon: icon.png
+  tags:
+    - social
+credentials_for_provider:

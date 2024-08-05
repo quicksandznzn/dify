@@ -1,0 +1,27 @@
+identity:
+  name: mysql
+  author: quicksandzn
+  label:
+    en_US: MySQL
+    zh_Hans: MySQL
+    pt_BR: MySQL
+  icon: icon.svg
+description:
+  human:
+    en_US: sql
+    zh_Hans: MySQL
+  llm: sql
+parameters:
+  - name: sql
+    type: string
+    required: true
+    label:
+      en_US: sql
+      zh_Hans: sql
+      pt_BR: sql
+    human_description:
+      en_US: sql
+      zh_Hans: sql
+      pt_BR: sql
+    form: form
+
