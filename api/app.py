@@ -1,7 +1,3 @@
-import os
-
-from configs import dify_config
-
 # if os.environ.get("DEBUG", "false").lower() != 'true':
 #     from gevent import monkey
 #
@@ -10,9 +6,9 @@ from configs import dify_config
 #     import grpc.experimental.gevent
 #
 #     grpc.experimental.gevent.init_gevent()
-
 import json
 import logging
+import os
 import sys
 import threading
 import time
@@ -22,7 +18,9 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, Response, request
 from flask_cors import CORS
 from werkzeug.exceptions import Unauthorized
+
 from commands import register_commands
+from configs import dify_config
 
 # DO NOT REMOVE BELOW
 from events import event_handlers
