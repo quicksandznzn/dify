@@ -36,6 +36,7 @@
   <a href="./README_FR.md"><img alt="README en Français" src="https://img.shields.io/badge/Français-d9d9d9"></a>
   <a href="./README_KL.md"><img alt="README tlhIngan Hol" src="https://img.shields.io/badge/Klingon-d9d9d9"></a>
   <a href="./README_KR.md"><img alt="한국어 README" src="https://img.shields.io/badge/한국어-d9d9d9"></a>
+  <a href="./README_TR.md"><img alt="Türkçe README" src="https://img.shields.io/badge/Türkçe-d9d9d9"></a>
 
 </p>
 
@@ -214,7 +215,6 @@ Dify를 Kubernetes에 배포하고 프리미엄 스케일링 설정을 구성했
 
 * [Github 토론](https://github.com/langgenius/dify/discussions). 피드백 공유 및 질문하기에 적합합니다.
 * [GitHub 이슈](https://github.com/langgenius/dify/issues). Dify.AI 사용 중 발견한 버그와 기능 제안에 적합합니다. [기여 가이드](https://github.com/langgenius/dify/blob/main/CONTRIBUTING.md)를 참조하세요. 
-* [이메일](mailto:support@dify.ai?subject=[GitHub]Questions%20About%20Dify). Dify.AI 사용에 대한 질문하기에 적합합니다.
 * [디스코드](https://discord.gg/FngNHpbcY7). 애플리케이션 공유 및 커뮤니티와 소통하기에 적합합니다.
 * [트위터](https://twitter.com/dify_ai). 애플리케이션 공유 및 커뮤니티와 소통하기에 적합합니다.
 
