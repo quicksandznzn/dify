@@ -23,7 +23,7 @@ import Loading from '@/app/components/base/loading'
 import { NEED_REFRESH_APP_LIST_KEY } from '@/config'
 import { useAppContext } from '@/context/app-context'
 import { getRedirection } from '@/utils/app-redirection'
-import SearchInput from '@/app/components/base/search-input'
+import Input from '@/app/components/base/input'
 
 type AppsProps = {
   pageType?: PageType
@@ -118,6 +118,7 @@ const Apps = ({
   const [isShowCreateModal, setIsShowCreateModal] = React.useState(false)
   const onCreate: CreateAppModalProps['onConfirm'] = async ({
     name,
+    icon_type,
     icon,
     icon_background,
     description,
@@ -129,6 +130,7 @@ const Apps = ({
       const app = await importApp({
         data: export_data,
         name,
+        icon_type,
         icon,
         icon_background,
         description,
@@ -185,7 +187,14 @@ const Apps = ({
             allCategoriesEn={allCategoriesEn}
           />
         </>
-        <SearchInput value={keywords} onChange={handleKeywordsChange}/>
+        <Input
+          showLeftIcon
+          showClearIcon
+          wrapperClassName='w-[200px]'
+          value={keywords}
+          onChange={e => handleKeywordsChange(e.target.value)}
+          onClear={() => handleKeywordsChange('')}
+        />
 
       </div>
 
@@ -215,8 +224,10 @@ const Apps = ({
       </div>
       {isShowCreateModal && (
         <CreateAppModal
+          appIconType={currApp?.app.icon_type || 'emoji'}
           appIcon={currApp?.app.icon || ''}
           appIconBackground={currApp?.app.icon_background || ''}
+          appIconUrl={currApp?.app.icon_url}
           appName={currApp?.app.name || ''}
           appDescription={currApp?.app.description || ''}
           show={isShowCreateModal}
