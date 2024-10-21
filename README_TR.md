@@ -4,7 +4,7 @@
   <a href="https://cloud.dify.ai">Dify Bulut</a> ·
   <a href="https://docs.dify.ai/getting-started/install-self-hosted">Kendi Sunucunuzda Barındırma</a> ·
   <a href="https://docs.dify.ai">Dokümantasyon</a> ·
-  <a href="https://cal.com/guchenhe/60-min-meeting">Kurumsal Sorgu</a>
+  <a href="https://udify.app/chat/22L1zSxg6yW1cWQg">Yalnızca İngilizce: Kurumsal Sorgulama</a>
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
             alt="Discord'da sohbet et"></a>
     <a href="https://twitter.com/intent/follow?screen_name=dify_ai" target="_blank">
         <img src="https://img.shields.io/twitter/follow/dify_ai?logo=X&color=%20%23f5f5f5"
-            alt="Twitter'da takip et"></a>
+            alt="X(Twitter)'da takip et"></a>
     <a href="https://hub.docker.com/u/langgenius" target="_blank">
         <img alt="Docker Çekmeleri" src="https://img.shields.io/docker/pulls/langgenius/dify-web?labelColor=%20%23FDB062&color=%20%23f79009"></a>
     <a href="https://github.com/langgenius/dify/graphs/commit-activity" target="_blank">
@@ -38,6 +38,7 @@
   <a href="./README_KR.md"><img alt="README in Korean" src="https://img.shields.io/badge/한국어-d9d9d9"></a>
   <a href="./README_AR.md"><img alt="README بالعربية" src="https://img.shields.io/badge/العربية-d9d9d9"></a>
   <a href="./README_TR.md"><img alt="Türkçe README" src="https://img.shields.io/badge/Türkçe-d9d9d9"></a>
+  <a href="./README_VI.md"><img alt="README Tiếng Việt" src="https://img.shields.io/badge/Ti%E1%BA%BFng%20Vi%E1%BB%87t-d9d9d9"></a>
 </p>
 
 
@@ -155,7 +156,7 @@ Bu [başlangıç kılavuzu](#quick-start) ile Dify'ı kendi ortamınızda hızl�
 Daha fazla referans ve detaylı talimatlar için [dokümantasyonumuzu](https://docs.dify.ai) kullanın.
 
 - **Kurumlar / organizasyonlar için Dify</br>**
-Ek kurumsal odaklı özellikler sunuyoruz. Kurumsal ihtiyaçları görüşmek için [bizimle bir toplantı planlayın](https://cal.com/guchenhe/30min) veya [bize bir e-posta gönderin](mailto:business@dify.ai?subject=[GitHub]Business%20License%20Inquiry). </br>
+Ek kurumsal odaklı özellikler sunuyoruz. Kurumsal ihtiyaçları görüşmek için [bize bir e-posta gönderin](mailto:business@dify.ai?subject=[GitHub]Business%20License%20Inquiry). </br>
   > AWS kullanan startuplar ve küçük işletmeler için, [AWS Marketplace'deki Dify Premium'a](https://aws.amazon.com/marketplace/pp/prodview-t22mebxzwjhu6) göz atın ve tek tıklamayla kendi AWS VPC'nize dağıtın. Bu, özel logo ve marka ile uygulamalar oluşturma seçeneğine sahip uygun fiyatlı bir AMI teklifdir.
 
 ## Güncel Kalma
@@ -199,9 +200,13 @@ Yüksek kullanılabilirliğe sahip bir kurulum yapılandırmak isterseniz, Dify'
 
 #### Dağıtım için Terraform Kullanımı
 
+Dify'ı bulut platformuna tek tıklamayla dağıtın [terraform](https://www.terraform.io/) kullanarak
+
 ##### Azure Global
-[Terraform](https://www.terraform.io/) kullanarak Dify'ı Azure'a tek tıklamayla dağıtın.
-- [@nikawang tarafından Azure Terraform](https://github.com/nikawang/dify-azure-terraform)
+- [Azure Terraform tarafından @nikawang](https://github.com/nikawang/dify-azure-terraform)
+
+##### Google Cloud
+- [Google Cloud Terraform tarafından @sotazum](https://github.com/DeNA/dify-google-cloud-terraform)
 
 ## Katkıda Bulunma
 
@@ -221,24 +226,7 @@ Aynı zamanda, lütfen Dify'ı sosyal medyada, etkinliklerde ve konferanslarda p
 * [Github Tartışmaları](https://github.com/langgenius/dify/discussions). En uygun: geri bildirim paylaşmak ve soru sormak için.
 * [GitHub Sorunları](https://github.com/langgenius/dify/issues). En uygun: Dify.AI kullanırken karşılaştığınız hatalar ve özellik önerileri için. [Katkı Kılavuzumuza](https://github.com/langgenius/dify/blob/main/CONTRIBUTING.md) bakın.
 * [Discord](https://discord.gg/FngNHpbcY7). En uygun: uygulamalarınızı paylaşmak ve toplulukla vakit geçirmek için.
-* [Twitter](https://twitter.com/dify_ai). En uygun: uygulamalarınızı paylaşmak ve toplulukla vakit geçirmek için.
-
-Veya doğrudan bir ekip üyesiyle toplantı planlayın:
-
-<table>
-  <tr>
-    <th>İletişim Noktası</th>
-    <th>Amaç</th>
-  </tr>
-  <tr>
-    <td><a href='https://cal.com/guchenhe/15min' target='_blank'><img class="schedule-button" src='https://github.com/langgenius/dify/assets/13230914/9ebcd111-1205-4d71-83d5-948d70b809f5' alt='Git-Hub-README-Button-3x' style="width: 180px; height: auto; object-fit: contain;"/></a></td>
-    <td>İş sorgulamaları & ürün geri bildirimleri</td>
-  </tr>
-  <tr>
-    <td><a href='https://cal.com/pinkbanana' target='_blank'><img class="schedule-button" src='https://github.com/langgenius/dify/assets/13230914/d1edd00a-d7e4-4513-be6c-e57038e143fd' alt='Git-Hub-README-Button-2x' style="width: 180px; height: auto; object-fit: contain;"/></a></td>
-    <td>Katkılar, sorunlar & özellik istekleri</td>
-  </tr>
-</table>
+* [X(Twitter)](https://twitter.com/dify_ai). En uygun: uygulamalarınızı paylaşmak ve toplulukla vakit geçirmek için.
 
 ## Star history
 
