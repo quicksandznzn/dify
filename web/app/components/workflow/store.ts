@@ -21,6 +21,7 @@ import type {
   WorkflowRunningData,
 } from './types'
 import { WorkflowContext } from './context'
+import type { NodeTracing, VersionHistory } from '@/types/workflow'
 
 // #TODO chatVar#
 // const MOCK_DATA = [
@@ -166,6 +167,12 @@ type Shape = {
   setShowImportDSLModal: (showImportDSLModal: boolean) => void
   showTips: string
   setShowTips: (showTips: string) => void
+  iterTimes: number
+  setIterTimes: (iterTimes: number) => void
+  iterParallelLogMap: Map<string, Map<string, NodeTracing[]>>
+  setIterParallelLogMap: (iterParallelLogMap: Map<string, Map<string, NodeTracing[]>>) => void
+  versionHistory: VersionHistory[]
+  setVersionHistory: (versionHistory: VersionHistory[]) => void
 }
 
 export const createWorkflowStore = () => {
@@ -281,6 +288,13 @@ export const createWorkflowStore = () => {
     setShowImportDSLModal: showImportDSLModal => set(() => ({ showImportDSLModal })),
     showTips: '',
     setShowTips: showTips => set(() => ({ showTips })),
+    iterTimes: 1,
+    setIterTimes: iterTimes => set(() => ({ iterTimes })),
+    iterParallelLogMap: new Map<string, Map<string, NodeTracing[]>>(),
+    setIterParallelLogMap: iterParallelLogMap => set(() => ({ iterParallelLogMap })),
+
+    versionHistory: [],
+    setVersionHistory: versionHistory => set(() => ({ versionHistory })),
   }))
 }
 

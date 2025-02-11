@@ -3,10 +3,11 @@ import Chat from '../chat'
 import type {
   ChatConfig,
   ChatItem,
+  ChatItemInTree,
   OnSend,
 } from '../types'
 import { useChat } from '../chat/hooks'
-import { getLastAnswer } from '../utils'
+import { getLastAnswer, isValidGeneratedAnswer } from '../utils'
 import { useEmbeddedChatbotContext } from './context'
 import ConfigPanel from './config-panel'
 import { isDify } from './utils'
@@ -42,18 +43,21 @@ const ChatWrapper = () => {
 
     return {
       ...config,
+      file_upload: {
+        ...(config as any).file_upload,
+        fileUploadConfig: (config as any).system_parameters,
+      },
       supportFeedback: true,
       opening_statement: currentConversationId ? currentConversationItem?.introduction : (config as any).opening_statement,
     } as ChatConfig
   }, [appParams, currentConversationItem?.introduction, currentConversationId])
   const {
-    chatListRef,
     chatList,
+    setTargetMessageId,
     handleSend,
     handleStop,
     isResponding,
     suggestedQuestions,
-    handleUpdateChatList,
   } = useChat(
     appConfig,
     {
@@ -67,15 +71,15 @@ const ChatWrapper = () => {
   useEffect(() => {
     if (currentChatInstanceRef.current)
       currentChatInstanceRef.current.handleStop = handleStop
-  }, [])
+  }, [currentChatInstanceRef, handleStop])
 
-  const doSend: OnSend = useCallback((message, files, last_answer) => {
+  const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
     const data: any = {
       query: message,
       files,
       inputs: currentConversationId ? currentConversationItem?.inputs : newConversationInputs,
       conversation_id: currentConversationId,
-      parent_message_id: last_answer?.id || getLastAnswer(chatListRef.current)?.id || null,
+      parent_message_id: (isRegenerate ? parentAnswer?.id : getLastAnswer(chatList)?.id) || null,
     }
 
     handleSend(
@@ -88,32 +92,21 @@ const ChatWrapper = () => {
       },
     )
   }, [
-    chatListRef,
-    appConfig,
+    chatList,
+    handleNewConversationCompleted,
+    handleSend,
     currentConversationId,
     currentConversationItem,
-    handleSend,
     newConversationInputs,
-    handleNewConversationCompleted,
     isInstalledApp,
     appId,
   ])
 
-  const doRegenerate = useCallback((chatItem: ChatItem) => {
-    const index = chatList.findIndex(item => item.id === chatItem.id)
-    if (index === -1)
-      return
-
-    const prevMessages = chatList.slice(0, index)
-    const question = prevMessages.pop()
-    const lastAnswer = getLastAnswer(prevMessages)
-
-    if (!question)
-      return
-
-    handleUpdateChatList(prevMessages)
-    doSend(question.content, question.message_files, lastAnswer)
-  }, [chatList, handleUpdateChatList, doSend])
+  const doRegenerate = useCallback((chatItem: ChatItemInTree) => {
+    const question = chatList.find(item => item.id === chatItem.parentMessageId)!
+    const parentAnswer = chatList.find(item => item.id === question.parentMessageId)
+    doSend(question.content, question.message_files, true, isValidGeneratedAnswer(parentAnswer) ? parentAnswer : null)
+  }, [chatList, doSend])
 
   const chatNode = useMemo(() => {
     if (inputsForms.length) {
@@ -168,6 +161,7 @@ const ChatWrapper = () => {
       answerIcon={answerIcon}
       hideProcessDetail
       themeBuilder={themeBuilder}
+      switchSibling={siblingMessageId => setTargetMessageId(siblingMessageId)}
     />
   )
 }
