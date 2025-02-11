@@ -677,22 +677,23 @@ class CohereLargeLanguageModel(LargeLanguageModel):
 
         :return: model schema
         """
-        # get model schema
-        models = self.predefined_models()
-        model_map = {model.model: model for model in models}
-
         mode = credentials.get("mode")
+        base_model_schema = None
+        for predefined_model in self.predefined_models():
+            if (
+                mode == "chat" and predefined_model.model == "command-light-chat"
+            ) or predefined_model.model == "command-light":
+                base_model_schema = predefined_model
+                break
 
-        if mode == "chat":
-            base_model_schema = model_map["command-light-chat"]
-        else:
-            base_model_schema = model_map["command-light"]
+        if not base_model_schema:
+            raise ValueError("Model not found")
 
         base_model_schema = cast(AIModelEntity, base_model_schema)
 
         base_model_schema_features = base_model_schema.features or []
-        base_model_schema_model_properties = base_model_schema.model_properties or {}
-        base_model_schema_parameters_rules = base_model_schema.parameter_rules or []
+        base_model_schema_model_properties = base_model_schema.model_properties
+        base_model_schema_parameters_rules = base_model_schema.parameter_rules
 
         entity = AIModelEntity(
             model=model,

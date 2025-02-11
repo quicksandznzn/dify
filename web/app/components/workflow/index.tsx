@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import useSWR from 'swr'
 import { setAutoFreeze } from 'immer'
 import {
   useEventListener,
@@ -93,6 +94,7 @@ import { useFeaturesStore } from '@/app/components/base/features/hooks'
 import { useEventEmitterContextContext } from '@/context/event-emitter'
 import Confirm from '@/app/components/base/confirm'
 import { FILE_EXTS } from '@/app/components/base/prompt-editor/constants'
+import { fetchFileUploadConfig } from '@/service/common'
 
 const nodeTypes = {
   [CUSTOM_NODE]: CustomNode,
@@ -177,7 +179,7 @@ const Workflow: FC<WorkflowProps> = memo(({
     return () => {
       handleSyncWorkflowDraft(true, true)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const { handleRefreshWorkflowDraft } = useWorkflowUpdate()
@@ -278,7 +280,7 @@ const Workflow: FC<WorkflowProps> = memo(({
     <div
       id='workflow-container'
       className={`
-        relative w-full min-w-[960px] h-full bg-[#F0F2F7]
+        relative w-full min-w-[960px] h-full 
         ${workflowReadOnly && 'workflow-panel-animation'}
         ${nodeAnimation && 'workflow-node-animation'}
       `}
@@ -369,7 +371,8 @@ const Workflow: FC<WorkflowProps> = memo(({
         <Background
           gap={[14, 14]}
           size={2}
-          color='#E4E5E7'
+          className="bg-workflow-canvas-workflow-bg"
+          color='var(--color-workflow-canvas-workflow-dot-color)'
         />
       </ReactFlow>
     </div>
@@ -382,6 +385,7 @@ const WorkflowWrap = memo(() => {
     data,
     isLoading,
   } = useWorkflowInit()
+  const { data: fileUploadConfigResponse } = useSWR({ url: '/files/upload' }, fetchFileUploadConfig)
 
   const nodesData = useMemo(() => {
     if (data)
@@ -398,7 +402,7 @@ const WorkflowWrap = memo(() => {
 
   if (!data || isLoading) {
     return (
-      <div className='flex justify-center items-center relative w-full h-full bg-[#F0F2F7]'>
+      <div className='flex justify-center items-center relative w-full h-full'>
         <Loading />
       </div>
     )
@@ -417,6 +421,7 @@ const WorkflowWrap = memo(() => {
       allowed_file_extensions: features.file_upload?.allowed_file_extensions || FILE_EXTS[SupportUploadFileTypes.image].map(ext => `.${ext}`),
       allowed_file_upload_methods: features.file_upload?.allowed_file_upload_methods || features.file_upload?.image?.transfer_methods || ['local_file', 'remote_url'],
       number_limits: features.file_upload?.number_limits || features.file_upload?.image?.number_limits || 3,
+      fileUploadConfig: fileUploadConfigResponse,
     },
     opening: {
       enabled: !!features.opening_statement,

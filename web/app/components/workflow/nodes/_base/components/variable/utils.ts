@@ -315,6 +315,24 @@ const formatItem = (
     }
   }
 
+  const { error_strategy } = data
+
+  if (error_strategy) {
+    res.vars = [
+      ...res.vars,
+      {
+        variable: 'error_message',
+        type: VarType.string,
+        isException: true,
+      },
+      {
+        variable: 'error_type',
+        type: VarType.string,
+        isException: true,
+      },
+    ]
+  }
+
   const selector = [id]
   res.vars = res.vars.filter((v) => {
     const isCurrentMatched = filterVar(v, (() => {
@@ -528,7 +546,9 @@ export const getVarType = ({
   else {
     (valueSelector as ValueSelector).slice(1).forEach((key, i) => {
       const isLast = i === valueSelector.length - 2
-      curr = curr?.find((v: any) => v.variable === key)
+      if (Array.isArray(curr))
+        curr = curr?.find((v: any) => v.variable === key)
+
       if (isLast) {
         type = curr?.type
       }
@@ -737,6 +757,11 @@ export const getNodeUsedVars = (node: Node): ValueSelector[] => {
 
     case BlockEnum.Iteration: {
       res = [(data as IterationNodeType).iterator_selector]
+      break
+    }
+
+    case BlockEnum.ListFilter: {
+      res = [(data as ListFilterNodeType).variable]
       break
     }
   }
@@ -995,6 +1020,12 @@ export const updateNodeVars = (oldNode: Node, oldVarSelector: ValueSelector, new
         if (payload.iterator_selector.join('.') === oldVarSelector.join('.'))
           payload.iterator_selector = newVarSelector
 
+        break
+      }
+      case BlockEnum.ListFilter: {
+        const payload = data as ListFilterNodeType
+        if (payload.variable.join('.') === oldVarSelector.join('.'))
+          payload.variable = newVarSelector
         break
       }
     }

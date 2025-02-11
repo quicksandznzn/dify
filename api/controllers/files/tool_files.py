@@ -1,5 +1,5 @@
 from flask import Response
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse  # type: ignore
 from werkzeug.exceptions import Forbidden, NotFound
 
 from controllers.files import api
@@ -42,10 +42,10 @@ class ToolFilePreviewApi(Resource):
             stream,
             mimetype=tool_file.mimetype,
             direct_passthrough=True,
-            headers={
-                "Content-Length": str(tool_file.size),
-            },
+            headers={},
         )
+        if tool_file.size > 0:
+            response.headers["Content-Length"] = str(tool_file.size)
         if args["as_attachment"]:
             response.headers["Content-Disposition"] = f"attachment; filename={tool_file.name}"
 

@@ -19,6 +19,7 @@ def file():
         related_id="test_related_id",
         remote_url="test_url",
         filename="test_file.txt",
+        storage_key="",
     )
 
 
@@ -33,8 +34,8 @@ def test_get_file_attribute(pool, file):
     assert result.value == file.filename
 
     # Test getting a non-existent attribute
-    with pytest.raises(ValueError):
-        pool.get(("node_1", "file_var", "non_existent_attr"))
+    result = pool.get(("node_1", "file_var", "non_existent_attr"))
+    assert result is None
 
 
 def test_use_long_selector(pool):

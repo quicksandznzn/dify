@@ -1,5 +1,5 @@
 # base image
-FROM node:20.11-alpine3.19 AS base
+FROM node:20-alpine3.20 AS base
 LABEL maintainer="takatost@gmail.com"
 
 # if you located in China, you can use aliyun mirror to speed up
@@ -62,7 +62,6 @@ RUN yarn global add pm2 \
     && mkdir /.pm2 \
     && chown -R 1001:0 /.pm2 /app/web \
     && chmod -R g=u /.pm2 /app/web
-
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}

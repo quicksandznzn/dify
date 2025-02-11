@@ -2,13 +2,12 @@ import datetime
 import json
 
 from flask import request
-from flask_login import current_user
-from flask_restful import Resource, marshal_with, reqparse
+from flask_login import current_user  # type: ignore
+from flask_restful import Resource, marshal_with, reqparse  # type: ignore
 from werkzeug.exceptions import NotFound
 
 from controllers.console import api
-from controllers.console.setup import setup_required
-from controllers.console.wraps import account_initialization_required
+from controllers.console.wraps import account_initialization_required, setup_required
 from core.indexing_runner import IndexingRunner
 from core.rag.extractor.entity.extract_setting import ExtractSetting
 from core.rag.extractor.notion_extractor import NotionExtractor
@@ -84,7 +83,7 @@ class DataSourceApi(Resource):
         if action == "enable":
             if data_source_binding.disabled:
                 data_source_binding.disabled = False
-                data_source_binding.updated_at = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+                data_source_binding.updated_at = datetime.datetime.now(datetime.UTC).replace(tzinfo=None)
                 db.session.add(data_source_binding)
                 db.session.commit()
             else:
@@ -93,7 +92,7 @@ class DataSourceApi(Resource):
         if action == "disable":
             if not data_source_binding.disabled:
                 data_source_binding.disabled = True
-                data_source_binding.updated_at = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+                data_source_binding.updated_at = datetime.datetime.now(datetime.UTC).replace(tzinfo=None)
                 db.session.add(data_source_binding)
                 db.session.commit()
             else:
@@ -219,7 +218,7 @@ class DataSourceNotionApi(Resource):
             args["doc_form"],
             args["doc_language"],
         )
-        return response, 200
+        return response.model_dump(), 200
 
 
 class DataSourceNotionDatasetSyncApi(Resource):

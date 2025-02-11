@@ -7,7 +7,7 @@ from core.tools.entities.tool_entities import WorkflowToolParameterConfiguration
 
 class WorkflowToolConfigurationUtils:
     @classmethod
-    def check_parameter_configurations(cls, configurations: Mapping[str, Any]):
+    def check_parameter_configurations(cls, configurations: list[Mapping[str, Any]]):
         for configuration in configurations:
             WorkflowToolParameterConfiguration.model_validate(configuration)
 
@@ -22,12 +22,12 @@ class WorkflowToolConfigurationUtils:
         if not start_node:
             return []
 
-        return [VariableEntity(**variable) for variable in start_node.get("data", {}).get("variables", [])]
+        return [VariableEntity.model_validate(variable) for variable in start_node.get("data", {}).get("variables", [])]
 
     @classmethod
     def check_is_synced(
         cls, variables: list[VariableEntity], tool_configurations: list[WorkflowToolParameterConfiguration]
-    ) -> None:
+    ) -> bool:
         """
         check is synced
 

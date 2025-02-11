@@ -55,6 +55,7 @@ def test_execute_if_else_result_true():
     pool.add(["start", "less_than"], 21)
     pool.add(["start", "greater_than_or_equal"], 22)
     pool.add(["start", "less_than_or_equal"], 21)
+    pool.add(["start", "null"], None)
     pool.add(["start", "not_null"], "1212")
 
     node = IfElseNode(
@@ -247,6 +248,7 @@ def test_array_file_contains_file_name():
                 transfer_method=FileTransferMethod.LOCAL_FILE,
                 related_id="1",
                 filename="ab",
+                storage_key="",
             ),
         ],
     )
