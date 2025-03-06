@@ -94,7 +94,7 @@ const AppDetailLayout: FC<IAppDetailLayoutProps> = (props) => {
       },
     ]
     return navs
-  }, [t])
+  }, [])
 
   useEffect(() => {
     if (appDetail) {
@@ -106,6 +106,7 @@ const AppDetailLayout: FC<IAppDetailLayoutProps> = (props) => {
       // if ((appDetail.mode === 'advanced-chat' || appDetail.mode === 'workflow') && (pathname).endsWith('workflow'))
       //   setAppSiderbarExpand('collapse')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appDetail, isMobile])
 
   useEffect(() => {
@@ -119,7 +120,7 @@ const AppDetailLayout: FC<IAppDetailLayoutProps> = (props) => {
     }).finally(() => {
       setIsLoadingAppDetail(false)
     })
-  }, [appId, router, setAppDetail])
+  }, [appId, pathname])
 
   useEffect(() => {
     if (!appDetailRes || isLoadingCurrentWorkspace || isLoadingAppDetail)
@@ -147,7 +148,7 @@ const AppDetailLayout: FC<IAppDetailLayoutProps> = (props) => {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appDetailRes, appId, getNavigations, isCurrentWorkspaceEditor, isLoadingAppDetail, isLoadingCurrentWorkspace, router, setAppDetail, systemFeatures.enable_web_sso_switch_component])
+  }, [appDetailRes, isCurrentWorkspaceEditor, isLoadingAppDetail, isLoadingCurrentWorkspace, systemFeatures.enable_web_sso_switch_component])
 
   useUnmount(() => {
     setAppDetail()

@@ -169,6 +169,8 @@ type Shape = {
   setShowTips: (showTips: string) => void
   iterTimes: number
   setIterTimes: (iterTimes: number) => void
+  loopTimes: number
+  setLoopTimes: (loopTimes: number) => void
   iterParallelLogMap: Map<string, Map<string, NodeTracing[]>>
   setIterParallelLogMap: (iterParallelLogMap: Map<string, Map<string, NodeTracing[]>>) => void
   versionHistory: VersionHistory[]
@@ -184,7 +186,7 @@ export const createWorkflowStore = () => {
   }
   return createStore<Shape>(set => ({
     appId: '',
-    panelWidth: localStorage.getItem('workflow-node-panel-width') ? parseFloat(localStorage.getItem('workflow-node-panel-width')!) : 420,
+    panelWidth: localStorage.getItem('workflow-node-panel-width') ? Number.parseFloat(localStorage.getItem('workflow-node-panel-width')!) : 420,
     showSingleRunPanel: false,
     setShowSingleRunPanel: showSingleRunPanel => set(() => ({ showSingleRunPanel })),
     workflowRunningData: undefined,
@@ -290,6 +292,8 @@ export const createWorkflowStore = () => {
     setShowTips: showTips => set(() => ({ showTips })),
     iterTimes: 1,
     setIterTimes: iterTimes => set(() => ({ iterTimes })),
+    loopTimes: 1,
+    setLoopTimes: loopTimes => set(() => ({ loopTimes })),
     iterParallelLogMap: new Map<string, Map<string, NodeTracing[]>>(),
     setIterParallelLogMap: iterParallelLogMap => set(() => ({ iterParallelLogMap })),
 
