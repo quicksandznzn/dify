@@ -2,7 +2,8 @@ import json
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Self, Union
+from uuid import uuid4
 
 if TYPE_CHECKING:
     from models.model import AppMode
@@ -109,6 +110,8 @@ class Workflow(Base):
     app_id: Mapped[str] = mapped_column(StringUUID, nullable=False)
     type: Mapped[str] = mapped_column(db.String(255), nullable=False)
     version: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    marked_name: Mapped[str] = mapped_column(default="", server_default="")
+    marked_comment: Mapped[str] = mapped_column(default="", server_default="")
     graph: Mapped[str] = mapped_column(sa.Text)
     _features: Mapped[str] = mapped_column("features", sa.TEXT)
     created_by: Mapped[str] = mapped_column(StringUUID, nullable=False)
@@ -127,8 +130,9 @@ class Workflow(Base):
         "conversation_variables", db.Text, nullable=False, server_default="{}"
     )
 
-    def __init__(
-        self,
+    @classmethod
+    def new(
+        cls,
         *,
         tenant_id: str,
         app_id: str,
@@ -139,16 +143,25 @@ class Workflow(Base):
         created_by: str,
         environment_variables: Sequence[Variable],
         conversation_variables: Sequence[Variable],
-    ):
-        self.tenant_id = tenant_id
-        self.app_id = app_id
-        self.type = type
-        self.version = version
-        self.graph = graph
-        self.features = features
-        self.created_by = created_by
-        self.environment_variables = environment_variables or []
-        self.conversation_variables = conversation_variables or []
+        marked_name: str = "",
+        marked_comment: str = "",
+    ) -> Self:
+        workflow = Workflow()
+        workflow.id = str(uuid4())
+        workflow.tenant_id = tenant_id
+        workflow.app_id = app_id
+        workflow.type = type
+        workflow.version = version
+        workflow.graph = graph
+        workflow.features = features
+        workflow.created_by = created_by
+        workflow.environment_variables = environment_variables or []
+        workflow.conversation_variables = conversation_variables or []
+        workflow.marked_name = marked_name
+        workflow.marked_comment = marked_comment
+        workflow.created_at = datetime.now(UTC).replace(tzinfo=None)
+        workflow.updated_at = workflow.created_at
+        return workflow
 
     @property
     def created_by_account(self):
@@ -339,20 +352,7 @@ class WorkflowRunStatus(StrEnum):
     SUCCEEDED = "succeeded"
     FAILED = "failed"
     STOPPED = "stopped"
-    PARTIAL_SUCCESSED = "partial-succeeded"
-
-    @classmethod
-    def value_of(cls, value: str) -> "WorkflowRunStatus":
-        """
-        Get value of given mode.
-
-        :param value: mode value
-        :return: mode
-        """
-        for mode in cls:
-            if mode.value == value:
-                return mode
-        raise ValueError(f"invalid workflow run status value {value}")
+    PARTIAL_SUCCEEDED = "partial-succeeded"
 
 
 class WorkflowRun(Base):
@@ -755,7 +755,8 @@ class WorkflowAppLog(Base):
     __tablename__ = "workflow_app_logs"
     __table_args__ = (
         db.PrimaryKeyConstraint("id", name="workflow_app_log_pkey"),
-        db.Index("workflow_app_log_app_idx", "tenant_id", "app_id"),
+        db.Index("workflow_app_log_app_idx", "tenant_id", "app_id", "created_at"),
+        db.Index("workflow_app_log_workflow_run_idx", "workflow_run_id"),
     )
 
     id: Mapped[str] = mapped_column(StringUUID, server_default=db.text("uuid_generate_v4()"))

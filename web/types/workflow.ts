@@ -61,6 +61,7 @@ export type NodeTracing = {
       agent_strategy?: string
       icon?: string
     }
+    loop_variable_map?: Record<string, any>
   }
   metadata: {
     iterator_length: number
@@ -111,13 +112,28 @@ export type FetchWorkflowDraftResponse = {
   }
   hash: string
   updated_at: number
+  updated_by: {
+    id: string
+    name: string
+    email: string
+  },
   tool_published: boolean
   environment_variables?: EnvironmentVariable[]
   conversation_variables?: ConversationVariable[]
   version: string
+  marked_name: string
+  marked_comment: string
 }
 
 export type VersionHistory = FetchWorkflowDraftResponse
+
+export type FetchWorkflowDraftPageParams = {
+  appId: string
+  initialPage: number
+  limit: number
+  userId?: string
+  namedOnly?: boolean
+}
 
 export type FetchWorkflowDraftPageResponse = {
   items: VersionHistory[]
@@ -319,7 +335,19 @@ export type ConversationVariableResponse = {
 
 export type IterationDurationMap = Record<string, number>
 export type LoopDurationMap = Record<string, number>
+export type LoopVariableMap = Record<string, any>
 
 export type WorkflowConfigResponse = {
   parallel_depth_limit: number
+}
+
+export type PublishWorkflowParams = {
+  title: string
+  releaseNotes: string
+}
+
+export type UpdateWorkflowParams = {
+  workflowId: string
+  title: string
+  releaseNotes: string
 }
