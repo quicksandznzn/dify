@@ -42,6 +42,7 @@ import { changeLanguage } from '@/i18n/i18next-config'
 import { useAppFavicon } from '@/hooks/use-app-favicon'
 import { InputVarType } from '@/app/components/workflow/types'
 import { TransferMethod } from '@/types/app'
+import { noop } from 'lodash-es'
 
 function getFormattedChatList(messages: any[]) {
   const newChatList: ChatItem[] = []
@@ -51,7 +52,7 @@ function getFormattedChatList(messages: any[]) {
       id: `question-${item.id}`,
       content: item.query,
       isAnswer: false,
-      message_files: getProcessedFilesFromResponse(questionFiles.map((item: any) => ({ ...item, related_id: item.id }))),
+      message_files: getProcessedFilesFromResponse(questionFiles.map((item: any) => ({ ...item, related_id: item.id, upload_file_id: item.upload_file_id }))),
       parentMessageId: item.parent_message_id || undefined,
     })
     const answerFiles = item.message_files?.filter((file: any) => file.belongs_to === 'assistant') || []
@@ -62,7 +63,7 @@ function getFormattedChatList(messages: any[]) {
       feedback: item.feedback,
       isAnswer: true,
       citation: item.retriever_resources,
-      message_files: getProcessedFilesFromResponse(answerFiles.map((item: any) => ({ ...item, related_id: item.id }))),
+      message_files: getProcessedFilesFromResponse(answerFiles.map((item: any) => ({ ...item, related_id: item.id, upload_file_id: item.upload_file_id }))),
       parentMessageId: `question-${item.id}`,
     })
   })
@@ -265,7 +266,7 @@ export const useChatWithHistory = (installedAppInfo?: InstalledApp) => {
 
   const currentConversationLatestInputs = useMemo(() => {
     if (!currentConversationId || !appChatListData?.data.length)
-      return {}
+      return newConversationInputsRef.current || {}
     return appChatListData.data.slice().pop().inputs || {}
   }, [appChatListData, currentConversationId])
   const [currentConversationInputs, setCurrentConversationInputs] = useState<Record<string, any>>(currentConversationLatestInputs || {})
@@ -318,7 +319,7 @@ export const useChatWithHistory = (installedAppInfo?: InstalledApp) => {
       callback?.()
     }
   }, [setShowNewConversationItemInList, checkInputsRequired])
-  const currentChatInstanceRef = useRef<{ handleStop: () => void }>({ handleStop: () => { } })
+  const currentChatInstanceRef = useRef<{ handleStop: () => void }>({ handleStop: noop })
   const handleChangeConversation = useCallback((conversationId: string) => {
     currentChatInstanceRef.current.handleStop()
     setNewConversationId('')
