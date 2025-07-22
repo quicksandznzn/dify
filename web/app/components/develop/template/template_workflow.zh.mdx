@@ -59,7 +59,7 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
         <i>由于 Cloudflare 限制，请求会在 100 秒超时无返回后中断。</i>
       - `user` (string) Required
         用户标识，用于定义终端用户的身份，方便检索、统计。
-        由开发者定义规则，需保证用户标识在应用内唯一。
+        由开发者定义规则，需保证用户标识在应用内唯一。API 无法访问 WebApp 创建的会话。
 
 
     ### Response
@@ -98,7 +98,6 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
       - `data` (object) 详细内容
         - `id` (string) workflow 执行 ID
         - `workflow_id` (string) 关联 Workflow ID
-        - `sequence_number` (int) 自增序号，App 内自增，从 1 开始
         - `created_at` (timestamp) 开始时间
     - `event: node_started` node 开始执行
       - `task_id` (string) 任务 ID，用于请求跟踪和下方的停止响应接口
@@ -232,7 +231,7 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
     ### Streaming Mode
     <CodeGroup title="Response">
     ```streaming {{ title: 'Response' }}
-      data: {"event": "workflow_started", "task_id": "5ad4cb98-f0c7-4085-b384-88c403be6290", "workflow_run_id": "5ad498-f0c7-4085-b384-88cbe6290", "data": {"id": "5ad498-f0c7-4085-b384-88cbe6290", "workflow_id": "dfjasklfjdslag", "sequence_number": 1, "created_at": 1679586595}}
+      data: {"event": "workflow_started", "task_id": "5ad4cb98-f0c7-4085-b384-88c403be6290", "workflow_run_id": "5ad498-f0c7-4085-b384-88cbe6290", "data": {"id": "5ad498-f0c7-4085-b384-88cbe6290", "workflow_id": "dfjasklfjdslag", "created_at": 1679586595}}
       data: {"event": "node_started", "task_id": "5ad4cb98-f0c7-4085-b384-88c403be6290", "workflow_run_id": "5ad498-f0c7-4085-b384-88cbe6290", "data": {"id": "5ad498-f0c7-4085-b384-88cbe6290", "node_id": "dfjasklfjdslag", "node_type": "start", "title": "Start", "index": 0, "predecessor_node_id": "fdljewklfklgejlglsd", "inputs": {}, "created_at": 1679586595}}
       data: {"event": "node_finished", "task_id": "5ad4cb98-f0c7-4085-b384-88c403be6290", "workflow_run_id": "5ad498-f0c7-4085-b384-88cbe6290", "data": {"id": "5ad498-f0c7-4085-b384-88cbe6290", "node_id": "dfjasklfjdslag", "node_type": "start", "title": "Start", "index": 0, "predecessor_node_id": "fdljewklfklgejlglsd", "inputs": {}, "outputs": {}, "status": "succeeded", "elapsed_time": 0.324, "execution_metadata": {"total_tokens": 63127864, "total_price": 2.378, "currency": "USD"},  "created_at": 1679586595}}
       data: {"event": "workflow_finished", "task_id": "5ad4cb98-f0c7-4085-b384-88c403be6290", "workflow_run_id": "5ad498-f0c7-4085-b384-88cbe6290", "data": {"id": "5ad498-f0c7-4085-b384-88cbe6290", "workflow_id": "dfjasklfjdslag", "outputs": {}, "status": "succeeded", "elapsed_time": 0.324, "total_tokens": 63127864, "total_steps": "1", "created_at": 1679586595, "finished_at": 1679976595}}
@@ -334,7 +333,7 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
   <Col>
     根据 workflow 执行 ID 获取 workflow 任务当前执行结果
     ### Path
-    - `workflow_run_id` (string) workflow_run_id，可在流式返回 Chunk 中获取
+    - `workflow_run_id` (string) workflow 执行 ID，可在流式返回 Chunk 中获取
     ### Response
     - `id` (string) workflow 执行 ID
     - `workflow_id` (string) 关联的 Workflow ID
@@ -394,7 +393,7 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
     - `task_id` (string) 任务 ID，可在流式返回 Chunk 中获取
     ### Request Body
     - `user` (string) Required
-      用户标识，用于定义终端用户的身份，必须和发送消息接口传入 user 保持一致。
+      用户标识，用于定义终端用户的身份，必须和发送消息接口传入 user 保持一致。API 无法访问 WebApp 创建的会话。
     ### Response
     - `result` (string) 固定返回 "success"
   </Col>
@@ -443,7 +442,7 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
         要上传的文件。
       </Property>
       <Property name='user' type='string' key='user'>
-          用户标识，用于定义终端用户的身份，必须和发送消息接口传入 user 保持一致。
+          用户标识，用于定义终端用户的身份，必须和发送消息接口传入 user 保持一致。服务 API 不会共享 WebApp 创建的对话。
       </Property>
     </Properties>
 
@@ -521,6 +520,12 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
       </Property>
       <Property name='limit' type='int' key='limit'>
         每页条数, 默认20.
+      </Property>
+      <Property name='created_by_end_user_session_id' type='str' key='created_by_end_user_session_id'>
+        由哪个endUser创建，例如，`abc-123`.
+      </Property>
+      <Property name='created_by_account' type='str' key='created_by_account'>
+        由哪个邮箱账户创建，例如，lizb@test.com.
       </Property>
     </Properties>
 
@@ -615,6 +620,8 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
   - `name` (string) 应用名称
   - `description` (string) 应用描述
   - `tags` (array[string]) 应用标签
+  - `mode` (string) 应用模式
+  - 'author_name' (string) 作者名称
   </Col>
   <Col>
     <CodeGroup title="Request" tag="GET" label="/info" targetCode={`curl -X GET '${props.appDetail.api_base_url}/info' \\\n-H 'Authorization: Bearer {api_key}'`}>
@@ -631,7 +638,9 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
       "tags": [
         "tag1",
         "tag2"
-      ]
+      ],
+      "mode": "workflow",
+      "author_name": "Dify"
     }
     ```
     </CodeGroup>
@@ -669,11 +678,30 @@ Workflow 应用无会话支持，适合用于翻译/文章写作/总结 AI 等�
         - `default` (string) 默认值
         - `options` (array[string]) 选项值
     - `file_upload` (object) 文件上传配置
-      - `image` (object) 图片设置
-        当前仅支持图片类型：`png`, `jpg`, `jpeg`, `webp`, `gif`
-        - `enabled` (bool) 是否开启
-        - `number_limits` (int) 图片数量限制，默认 3
-        - `transfer_methods` (array[string]) 传递方式列表，remote_url , local_file，必选一个
+      - `document` (object) 文档设置  
+        当前仅支持文档类型：`txt`, `md`, `markdown`, `pdf`, `html`, `xlsx`, `xls`, `docx`, `csv`, `eml`, `msg`, `pptx`, `ppt`, `xml`, `epub`。  
+        - `enabled` (bool) 是否启用  
+        - `number_limits` (int) 文档数量限制，默认为 3  
+        - `transfer_methods` (array[string]) 传输方式列表：`remote_url`, `local_file`，必须选择一个。  
+      - `image` (object) 图片设置  
+        当前仅支持图片类型：`png`, `jpg`, `jpeg`, `webp`, `gif`。  
+        - `enabled` (bool) 是否启用  
+        - `number_limits` (int) 图片数量限制，默认为 3  
+        - `transfer_methods` (array[string]) 传输方式列表：`remote_url`, `local_file`，必须选择一个。  
+      - `audio` (object) 音频设置  
+        当前仅支持音频类型：`mp3`, `m4a`, `wav`, `webm`, `amr`。  
+        - `enabled` (bool) 是否启用  
+        - `number_limits` (int) 音频数量限制，默认为 3  
+        - `transfer_methods` (array[string]) 传输方式列表：`remote_url`, `local_file`，必须选择一个。  
+      - `video` (object) 视频设置  
+        当前仅支持视频类型：`mp4`, `mov`, `mpeg`, `mpga`。  
+        - `enabled` (bool) 是否启用  
+        - `number_limits` (int) 视频数量限制，默认为 3  
+        - `transfer_methods` (array[string]) 传输方式列表：`remote_url`, `local_file`，必须选择一个。  
+      - `custom` (object) 自定义设置  
+        - `enabled` (bool) 是否启用  
+        - `number_limits` (int) 自定义数量限制，默认为 3  
+        - `transfer_methods` (array[string]) 传输方式列表：`remote_url`, `local_file`，必须选择一个。 
     - `system_parameters` (object) 系统参数
       - `file_size_limit` (int) 文档上传大小限制 (MB)
       - `image_file_size_limit` (int) 图片文件上传大小限制（MB）
