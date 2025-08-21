@@ -248,6 +248,7 @@ const translation = {
       emailLabel: 'New email',
       emailPlaceholder: 'Enter a new email',
       existingEmail: 'A user with this email already exists.',
+      unAvailableEmail: 'This email is temporarily unavailable.',
       sendVerifyCode: 'Send verification code',
       continue: 'Continue',
       changeTo: 'Change to {{email}}',
@@ -707,6 +708,10 @@ const translation = {
   },
   pagination: {
     perPage: 'Items per page',
+  },
+  avatar: {
+    deleteTitle: 'Remove Avatar',
+    deleteDescription: 'Are you sure you want to remove your profile picture? Your account will use the default initial avatar.',
   },
   imageInput: {
     dropImageHere: 'Drop your image here, or',

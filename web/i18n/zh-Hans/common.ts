@@ -248,6 +248,7 @@ const translation = {
       emailLabel: '新邮箱',
       emailPlaceholder: '输入新邮箱',
       existingEmail: '该邮箱已存在',
+      unAvailableEmail: '该邮箱暂时无法使用。',
       sendVerifyCode: '发送验证码',
       continue: '继续',
       changeTo: '更改为 {{email}}',
@@ -707,6 +708,10 @@ const translation = {
   },
   pagination: {
     perPage: '每页显示',
+  },
+  avatar: {
+    deleteTitle: '删除头像',
+    deleteDescription: '确定要删除你的个人头像吗？你的账号将使用默认的首字母头像。',
   },
   imageInput: {
     dropImageHere: '将图片拖放到此处，或',

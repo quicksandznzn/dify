@@ -87,11 +87,6 @@ const translation = {
   agentLog: 'Registro do agente',
   viewLog: 'Ver Registro',
   agenteLogDetail: {
-    agentMode: 'Modo Agente',
-    toolUsed: 'Ferramenta usada',
-    iterations: 'Iterações',
-    iteration: 'Iteração',
-    finalProcessing: 'Processamento Final',
   },
   agentLogDetail: {
     iterations: 'Iterações',
@@ -100,6 +95,7 @@ const translation = {
     iteration: 'Iteração',
     toolUsed: 'Ferramenta usada',
   },
+  dateFormat: 'DD/MM/AAAA',
 }
 
 export default translation
