@@ -30,6 +30,7 @@ import Popover from '@/app/components/base/popover'
 import Confirm from '@/app/components/base/confirm'
 import Tooltip from '@/app/components/base/tooltip'
 import Toast, { ToastContext } from '@/app/components/base/toast'
+import type { Item } from '@/app/components/base/select'
 import type { ColorMap, IndicatorProps } from '@/app/components/header/indicator'
 import Indicator from '@/app/components/header/indicator'
 import { asyncRunSafe } from '@/utils'
@@ -426,6 +427,8 @@ type IDocumentListProps = {
   pagination: PaginationProps
   onUpdate: () => void
   onManageMetadata: () => void
+  statusFilter: Item
+  onStatusFilterChange: (filter: string) => void
 }
 
 /**
@@ -440,6 +443,7 @@ const DocumentList: FC<IDocumentListProps> = ({
   pagination,
   onUpdate,
   onManageMetadata,
+  statusFilter,
 }) => {
   const { t } = useTranslation()
   const { formatTime } = useTimestamp()
@@ -451,6 +455,7 @@ const DocumentList: FC<IDocumentListProps> = ({
   const [localDocs, setLocalDocs] = useState<LocalDoc[]>(documents)
   const [sortField, setSortField] = useState<'name' | 'word_count' | 'hit_count' | 'created_at' | null>('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+
   const {
     isShowEditModal,
     showEditModal,
@@ -465,12 +470,22 @@ const DocumentList: FC<IDocumentListProps> = ({
   })
 
   useEffect(() => {
+    let filteredDocs = documents
+
+    if (statusFilter.value !== 'all') {
+      filteredDocs = filteredDocs.filter(doc =>
+        typeof doc.display_status === 'string'
+          && typeof statusFilter.value === 'string'
+          && doc.display_status.toLowerCase() === statusFilter.value.toLowerCase(),
+      )
+    }
+
     if (!sortField) {
-      setLocalDocs(documents)
+      setLocalDocs(filteredDocs)
       return
     }
 
-    const sortedDocs = [...documents].sort((a, b) => {
+    const sortedDocs = [...filteredDocs].sort((a, b) => {
       let aValue: any
       let bValue: any
 
@@ -506,7 +521,7 @@ const DocumentList: FC<IDocumentListProps> = ({
     })
 
     setLocalDocs(sortedDocs)
-  }, [documents, sortField, sortOrder])
+  }, [documents, sortField, sortOrder, statusFilter])
 
   const handleSort = (field: 'name' | 'word_count' | 'hit_count' | 'created_at') => {
     if (sortField === field) {
@@ -663,7 +678,11 @@ const DocumentList: FC<IDocumentListProps> = ({
                       {doc?.data_source_type === DataSourceType.FILE && <FileTypeIcon type={extensionToFileType(doc?.data_source_info?.upload_file?.extension ?? fileType)} className='mr-1.5' />}
                       {doc?.data_source_type === DataSourceType.WEB && <Globe01 className='mr-1.5 mt-[-3px] inline-flex align-middle' />}
                     </div>
-                    <span className='grow-1 truncate text-sm'>{doc.name}</span>
+                    <Tooltip
+                      popupContent={doc.name}
+                    >
+                      <span className='grow-1 truncate text-sm'>{doc.name}</span>
+                    </Tooltip>
                     <div className='hidden shrink-0 group-hover:ml-auto group-hover:flex'>
                       <Tooltip
                         popupContent={t('datasetDocuments.list.table.rename')}
